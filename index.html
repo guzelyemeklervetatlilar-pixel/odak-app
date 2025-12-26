@@ -61,13 +61,14 @@
 
     <script>
         const firebaseConfig = {
-            apiKey: "AIzaSyD4vRKdlx60gK85MhnXOgs4UyoPnDkfrK4",
-            authDomain: "derin-odak.firebaseapp.com",
-            databaseURL: "https://derin-odak-default-rtdb.europe-west1.firebasedatabase.app/",
-            projectId: "derin-odak",
-            storageBucket: "derin-odak.firebasestorage.app",
-            messagingSenderId: "898035634670",
-            appId: "1:898035634670:web:6f61ba8cdb24d6422e3eff"
+              apiKey: "AIzaSyD4vRKdlx60gK85MhnXOgs4UyoPnDkfrK4",
+  authDomain: "derin-odak.firebaseapp.com",
+  databaseURL: "https://derin-odak-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "derin-odak",
+  storageBucket: "derin-odak.firebasestorage.app",
+  messagingSenderId: "898035634670",
+  appId: "1:898035634670:web:6f61ba8cdb24d6422e3eff",
+  measurementId: "G-E9CLRKE4EJ"
         };
 
         // Firebase Güvenli Başlatma
@@ -140,4 +141,5 @@
             const i = setInterval(() => {
                 let m=Math.floor(t/60), s=t%60;
                 document.getElementById('timer').innerText=(m<10?"0"+m:m)+":"+(s<10?"0"+s:s);
+
                 if(--
