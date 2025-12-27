@@ -13,21 +13,22 @@
     <style>
         :root { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --accent: #38bdf8; --border: #334155; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
-        .app-card { background: var(--card); padding: 1.5rem; border-radius: 35px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); width: 90%; max-width: 340px; text-align: center; border: 1px solid var(--border); }
+        .app-card { background: var(--card); padding: 1.5rem; border-radius: 35px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); width: 90%; max-width: 340px; text-align: center; border: 1px solid var(--border); position: relative; }
         .hidden { display: none !important; }
         .main-btn { background: var(--accent); color: #fff; padding: 16px; border-radius: 18px; font-weight: 800; width: 100%; margin-top: 10px; border:none; cursor:pointer; font-size: 1rem; transition: 0.3s; }
-        .main-btn:active { transform: scale(0.95); }
         .logo-circle { width: 60px; height: 60px; background: linear-gradient(135deg, #0284c7, #38bdf8); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; font-size: 1.5rem; box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); }
         .stats-row { display: flex; justify-content: space-around; margin-bottom: 20px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 20px; border: 1px solid var(--border); }
         .stat-val { display: block; font-size: 1.1rem; color: var(--accent); font-weight: 800; }
         input { width: 100%; padding: 14px; border-radius: 15px; border: 2px solid var(--border); background: var(--bg); color: var(--text); margin: 10px 0; box-sizing: border-box; font-size: 16px; outline: none; }
-        input:focus { border-color: var(--accent); }
-        .timer-text { font-size: 4.5rem; font-weight: 900; color: var(--accent); margin: 20px 0; text-shadow: 0 0 20px rgba(56, 189, 248, 0.2); }
-        #msg { font-size: 0.8rem; margin-bottom: 10px; font-weight: 600; }
+        .timer-text { font-size: 4.5rem; font-weight: 900; color: var(--accent); margin: 20px 0; }
+        .quote-box { font-size: 0.9rem; font-style: italic; color: #94a3b8; margin: 15px 0; min-height: 40px; }
+        .settings-icon { position: absolute; top: 20px; right: 25px; font-size: 1.2rem; cursor: pointer; opacity: 0.7; }
     </style>
 </head>
 <body>
     <div class="app-card">
+        <div id="settingsBtn" class="settings-icon hidden" onclick="showScreen('settingsScreen')">⚙️</div>
+        
         <div id="statusArea">
             <div class="logo-circle">DO</div>
             <div class="stats-row">
@@ -45,21 +46,27 @@
         
         <div id="mainScreen" class="hidden">
             <h3 id="welcomeText">SELAM!</h3>
+            <div id="quoteText" class="quote-box">"Bugün harika bir gün olacak!"</div>
             <button class="main-btn" onclick="showScreen('goalScreen')">YENİ ODAK BAŞLAT</button>
-            <button class="main-btn" onclick="logout()" style="background:transparent; color: #ef4444; border: 1px solid #ef4444; margin-top:20px;">Çıkış Yap</button>
         </div>
 
         <div id="goalScreen" class="hidden">
             <h3>Hedefin Ne?</h3>
-            <input type="text" id="targetInput" placeholder="Örn: Matematik çalışmak">
-            <button class="main-btn" onclick="startFocus()">ODAKLANMAYI BAŞLAT</button>
-            <button class="main-btn" onclick="showScreen('mainScreen')" style="background:transparent;">Geri Dön</button>
+            <input type="text" id="targetInput" placeholder="Örn: Ders çalışmak">
+            <button class="main-btn" onclick="startFocus()">BAŞLAT</button>
+            <button class="main-btn" onclick="showScreen('mainScreen')" style="background:transparent;">Geri</button>
         </div>
 
         <div id="focusScreen" class="hidden">
             <h2 id="focusTitle" style="color: var(--accent);">Odaklan...</h2>
             <h1 class="timer-text" id="timer">25:00</h1>
             <button class="main-btn" onclick="finishGoal()">BİTİRDİM!</button>
+        </div>
+
+        <div id="settingsScreen" class="hidden">
+            <h3>Ayarlar ⚙️</h3>
+            <button class="main-btn" onclick="logout()" style="background:#ef4444;">ÇIKIŞ YAP</button>
+            <button class="main-btn" onclick="showScreen('mainScreen')" style="background:transparent;">GERİ DÖ</button>
         </div>
     </div>
 
@@ -77,14 +84,19 @@
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
+        const quotes = [
+            "Başlamak için mükemmel olmayı bekleme!",
+            "Küçük adımlar büyük yolları açar.",
+            "Odaklan, gerisi gelecek.",
+            "Bugün dünden daha iyi ol!",
+            "Zihnini serbest bırak, hedefine odaklan."
+        ];
+
         database.ref(".info/connected").on("value", (snap) => {
             const msg = document.getElementById('msg');
             if (snap.val() === true) {
                 msg.innerText = "Bulut Hazır ✅";
                 msg.style.color = "#4ade80";
-            } else {
-                msg.innerText = "Bağlanıyor...";
-                msg.style.color = "#38bdf8";
             }
         });
 
@@ -92,39 +104,27 @@
 
         window.onload = () => {
             const saved = localStorage.getItem('derinOdakUser');
-            if(saved) {
-                document.getElementById('userNameInput').value = saved;
-                connect(saved);
-            }
+            if(saved) connect(saved);
         };
 
         function connect(autoName = null) {
             const n = autoName || document.getElementById('userNameInput').value.trim().toLowerCase();
             if(!n) return;
 
-            const btn = document.getElementById('connectBtn');
-            btn.disabled = true;
-            btn.innerText = "GİRİŞ YAPILIYOR...";
-
             database.ref('users/' + n).once('value').then((snapshot) => {
                 const data = snapshot.val();
-                if(data) {
-                    userData = data;
-                } else {
-                    userData = { xp: 0, totalGoals: 0, streak: 0, name: n };
-                    database.ref('users/' + n).set(userData);
-                }
+                userData = data || { xp: 0, totalGoals: 0, streak: 0, name: n };
+                if(!data) database.ref('users/' + n).set(userData);
+                
                 localStorage.setItem('derinOdakUser', n);
                 updateUI();
                 showScreen('mainScreen');
-            }).catch((err) => {
-                alert("Bağlantı hatası!");
-                btn.disabled = false;
+                document.getElementById('settingsBtn').classList.remove('hidden');
             });
         }
 
         function showScreen(screenId) {
-            ['loginScreen', 'mainScreen', 'goalScreen', 'focusScreen'].forEach(id => {
+            ['loginScreen', 'mainScreen', 'goalScreen', 'focusScreen', 'settingsScreen'].forEach(id => {
                 document.getElementById(id).classList.add('hidden');
             });
             document.getElementById(screenId).classList.remove('hidden');
@@ -135,30 +135,24 @@
             document.getElementById('xpVal').innerText = userData.xp;
             document.getElementById('totalVal').innerText = userData.totalGoals;
             document.getElementById('streakVal').innerText = userData.streak;
+            document.getElementById('quoteText').innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
         }
 
         function startFocus() {
-            const target = document.getElementById('targetInput').value;
-            if(!target) return;
-            document.getElementById('focusTitle').innerText = target;
+            if(!document.getElementById('targetInput').value) return;
+            document.getElementById('focusTitle').innerText = document.getElementById('targetInput').value;
             showScreen('focusScreen');
             let t = 25 * 60;
             const timerInterval = setInterval(() => {
                 let m = Math.floor(t / 60), s = t % 60;
                 document.getElementById('timer').innerText = (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
-                if (t <= 0) {
-                    clearInterval(timerInterval);
-                    finishGoal();
-                }
-                t--;
+                if (t-- <= 0) { clearInterval(timerInterval); finishGoal(); }
             }, 1000);
         }
 
         function finishGoal() {
-            confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
-            userData.xp += 100; 
-            userData.totalGoals += 1; 
-            userData.streak += 1;
+            confetti({ particleCount: 150, spread: 100 });
+            userData.xp += 100; userData.totalGoals += 1; userData.streak += 1;
             database.ref('users/' + userData.name).set(userData);
             updateUI();
             showScreen('mainScreen');
