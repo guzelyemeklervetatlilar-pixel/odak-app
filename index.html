@@ -13,7 +13,23 @@
     <style>
         :root { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --accent: #38bdf8; --border: #334155; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
-        .app-card { background: var(--card); padding: 1.5rem; border-radius: 35px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); width: 90%; max-width: 340px; text-align: center; border: 1px solid var(--border); position: relative; height: 550px; display: flex; flex-direction: column; justify-content: center; }
+        
+        /* SPLASH SCREEN (GİRİŞ EKRANI) */
+        #splashScreen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg); display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 1000;
+            transition: opacity 0.8s ease;
+        }
+        .splash-logo { font-size: 2.5rem; font-weight: 800; color: var(--accent); letter-spacing: -1px; margin-bottom: 20px; }
+        .loader-container { width: 200px; height: 4px; background: var(--border); border-radius: 10px; overflow: hidden; }
+        .loader-bar { width: 0%; height: 100%; background: var(--accent); animation: load 3s forwards ease-in-out; }
+        @keyframes load { to { width: 100%; } }
+
+        /* UYGULAMA KARTI */
+        .app-card { background: var(--card); padding: 1.5rem; border-radius: 35px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); width: 90%; max-width: 340px; text-align: center; border: 1px solid var(--border); position: relative; height: 550px; display: flex; flex-direction: column; justify-content: center; opacity: 0; transition: opacity 0.5s ease; }
+        .app-visible { opacity: 1 !important; }
+
         .hidden { display: none !important; }
         .main-btn { background: var(--accent); color: #fff; padding: 14px; border-radius: 18px; font-weight: 800; width: 100%; margin-top: 10px; border:none; cursor:pointer; font-size: 0.9rem; transition: 0.3s; }
         .logo-circle { width: 50px; height: 50px; background: linear-gradient(135deg, #0284c7, #38bdf8); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; }
@@ -21,38 +37,32 @@
         .stat-val { display: block; font-size: 1rem; color: var(--accent); font-weight: 800; }
         input { width: 100%; padding: 12px; border-radius: 15px; border: 2px solid var(--border); background: var(--bg); color: var(--text); margin: 8px 0; font-size: 15px; outline: none; }
         .timer-text { font-size: 4rem; font-weight: 900; color: var(--accent); margin: 10px 0; }
-        .quote-box { font-size: 0.8rem; color: #94a3b8; margin: 10px 0; min-height: 35px; }
-        
-        /* Sağ Üst Ayarlar */
         .settings-icon { position: absolute; top: 20px; right: 20px; font-size: 1.4rem; cursor: pointer; z-index: 100; }
         .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 90; border-radius: 35px; }
         .side-menu { position: absolute; top: 0; right: 0; width: 70%; height: 100%; background: var(--card); z-index: 95; border-radius: 0 35px 35px 0; padding: 20px; box-sizing: border-box; border-left: 1px solid var(--border); }
-        
-        /* Emojiler */
         .emoji-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0; }
         .emoji-item { background: var(--bg); padding: 8px; border-radius: 12px; cursor: pointer; border: 2px solid transparent; }
         .emoji-item.active { border-color: var(--accent); }
-        
-        /* Müzik Listesi */
-        .music-item { background: var(--bg); padding: 10px; margin: 5px 0; border-radius: 12px; cursor: pointer; border: 1px solid var(--border); font-size: 0.8rem; }
-        .music-item.active { border-color: var(--accent); color: var(--accent); }
-
-        /* Nefes Animasyonu */
-        .breath-circle { width: 100px; height: 100px; background: var(--accent); border-radius: 50%; margin: 20px auto; opacity: 0.5; transition: all 4s linear; }
-        .expanding { transform: scale(1.8); opacity: 0.8; }
     </style>
 </head>
 <body>
-    <div class="app-card">
+
+    <div id="splashScreen">
+        <div class="splash-logo">DERİN ODAK</div>
+        <div class="loader-container">
+            <div class="loader-bar"></div>
+        </div>
+        <p style="margin-top: 15px; font-size: 0.7rem; color: #64748b;">Zihnini Hazırla...</p>
+    </div>
+
+    <div id="appContainer" class="app-card">
         <div id="settingsBtn" class="settings-icon hidden" onclick="toggleMenu(true)">⚙️</div>
         
         <div id="menuOverlay" class="overlay hidden" onclick="toggleMenu(false)">
             <div class="side-menu" onclick="event.stopPropagation()">
                 <h3>Ayarlar</h3>
                 <p id="userLabel" style="color:var(--accent);"></p>
-                <button class="main-btn" onclick="showScreen('musicScreen'); toggleMenu(false)">🎵 Müzik Seç</button>
                 <button class="main-btn" style="background:#ef4444; margin-top:50px;" onclick="logout()">Çıkış Yap</button>
-                <p style="font-size:0.6rem; margin-top:20px;">Kapatmak için sola tıkla</p>
             </div>
         </div>
 
@@ -66,16 +76,14 @@
         </div>
 
         <div id="loginScreen">
-            <p id="msg">Bağlanıyor...</p>
             <input type="text" id="userNameInput" placeholder="İsmin nedir?">
             <button class="main-btn" onclick="connect()">GİRİŞ</button>
         </div>
 
         <div id="mainScreen" class="hidden">
             <h3 id="welcomeText"></h3>
-            <div id="quoteText" class="quote-box"></div>
+            <div id="quoteText" style="font-size: 0.8rem; margin: 10px 0; color: #94a3b8;">Odaklanma vakti!</div>
             <button class="main-btn" onclick="showScreen('goalScreen')">ODAKLAN</button>
-            <button id="sadSupport" class="main-btn hidden" style="background:#8b5cf6;" onclick="showScreen('breathScreen')">🧘 Nefes Egzersizi Yap</button>
         </div>
 
         <div id="goalScreen" class="hidden">
@@ -85,27 +93,8 @@
                 <div class="emoji-item" onclick="selectEmoji(this, '💻')">💻</div>
                 <div class="emoji-item" onclick="selectEmoji(this, '🧘')">🧘</div>
                 <div class="emoji-item" onclick="selectEmoji(this, '😔')">😔</div>
-                <div class="emoji-item" onclick="selectEmoji(this, '🎨')">🎨</div>
-                <div class="emoji-item" onclick="selectEmoji(this, '🏋️')">🏋️</div>
-                <div class="emoji-item" onclick="selectEmoji(this, '🚀')">🚀</div>
-                <div class="emoji-item" onclick="selectEmoji(this, '💡')">💡</div>
             </div>
             <button class="main-btn" onclick="startFocus()">BAŞLAT</button>
-        </div>
-
-        <div id="musicScreen" class="hidden">
-            <h3>Müzik Seç 🎵</h3>
-            <div class="music-item" onclick="playMusic('lofi', this)">☕ Lofi Beats</div>
-            <div class="music-item" onclick="playMusic('rain', this)">🌧️ Yağmur Sesi</div>
-            <div class="music-item" onclick="playMusic('forest', this)">🌲 Doğa Sesi</div>
-            <div class="music-item" onclick="playMusic('none', this)">🔇 Sessizlik</div>
-            <button class="main-btn" onclick="showScreen('mainScreen')">TAMAM</button>
-        </div>
-
-        <div id="breathScreen" class="hidden">
-            <h3 id="breathAction">Hazır mısın?</h3>
-            <div id="bCircle" class="breath-circle"></div>
-            <button class="main-btn" onclick="showScreen('mainScreen')">BİTİR</button>
         </div>
 
         <div id="focusScreen" class="hidden">
@@ -114,8 +103,6 @@
             <button class="main-btn" onclick="finishGoal()">BİTTİ!</button>
         </div>
     </div>
-
-    <audio id="bgAudio" loop></audio>
 
     <script>
         const firebaseConfig = {
@@ -133,6 +120,26 @@
         let userData = { xp: 0, totalGoals: 0, streak: 0, name: "" };
         let selectedEmoji = "📚";
 
+        // SPLASH SCREEN KONTROLÜ
+        window.onload = () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splashScreen');
+                const app = document.getElementById('appContainer');
+                splash.style.opacity = '0';
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                    app.classList.add('app-visible');
+                    
+                    // Otomatik Giriş Kontrolü
+                    const saved = localStorage.getItem('derinOdakUser');
+                    if(saved) { 
+                        document.getElementById('userNameInput').value = saved; 
+                        connect(); 
+                    }
+                }, 800);
+            }, 3000); // 3 saniye bekle
+        };
+
         function connect() {
             const n = document.getElementById('userNameInput').value.trim().toLowerCase();
             if(!n) return;
@@ -145,6 +152,13 @@
             });
         }
 
+        function showScreen(id) {
+            ['loginScreen','mainScreen','goalScreen','focusScreen'].forEach(s => {
+                document.getElementById(s).classList.add('hidden');
+            });
+            document.getElementById(id).classList.remove('hidden');
+        }
+
         function toggleMenu(open) {
             document.getElementById('menuOverlay').classList.toggle('hidden', !open);
             document.getElementById('userLabel').innerText = "@" + userData.name;
@@ -154,48 +168,6 @@
             document.querySelectorAll('.emoji-item').forEach(i => i.classList.remove('active'));
             el.classList.add('active');
             selectedEmoji = emoji;
-            if(emoji === '😔') {
-                document.getElementById('quoteText').innerText = "Canın mı sıkkın knk? Her şey geçer, sen çok değerlisin. Bir nefes alalım mı?";
-                document.getElementById('sadSupport').classList.remove('hidden');
-            } else {
-                document.getElementById('sadSupport').classList.add('hidden');
-                document.getElementById('quoteText').innerText = "Odaklanma vakti! Bugün harika işler yapacaksın.";
-            }
-        }
-
-        function playMusic(type, el) {
-            const audio = document.getElementById('bgAudio');
-            const links = {
-                lofi: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", // Örnek link
-                rain: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-                forest: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
-            };
-            document.querySelectorAll('.music-item').forEach(i => i.classList.remove('active'));
-            if(type === 'none') { audio.pause(); } 
-            else { audio.src = links[type]; audio.play(); el.classList.add('active'); }
-        }
-
-        function showScreen(id) {
-            ['loginScreen','mainScreen','goalScreen','focusScreen','musicScreen','breathScreen'].forEach(s => {
-                document.getElementById(s).classList.add('hidden');
-            });
-            document.getElementById(id).classList.remove('hidden');
-            if(id === 'breathScreen') startBreathing();
-        }
-
-        function startBreathing() {
-            const circle = document.getElementById('bCircle');
-            const action = document.getElementById('breathAction');
-            const cycle = () => {
-                action.innerText = "Nefes Al... (4s)"; circle.classList.add('expanding');
-                setTimeout(() => { 
-                    action.innerText = "Tut... (4s)";
-                    setTimeout(() => {
-                        action.innerText = "Ver... (4s)"; circle.classList.remove('expanding');
-                    }, 4000);
-                }, 4000);
-            };
-            cycle(); setInterval(cycle, 12000);
         }
 
         function startFocus() {
@@ -224,11 +196,6 @@
         }
 
         function logout() { localStorage.removeItem('derinOdakUser'); location.reload(); }
-
-        window.onload = () => {
-            const saved = localStorage.getItem('derinOdakUser');
-            if(saved) { document.getElementById('userNameInput').value = saved; connect(); }
-        };
     </script>
 </body>
 </html>
