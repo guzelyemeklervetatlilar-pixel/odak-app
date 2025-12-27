@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Derin Odak - Senol Altunn Özel</title>
+    <title>Derin Odak - Pro v3.0</title>
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -11,63 +11,53 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     
     <style>
-        :root { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --accent: #38bdf8; --border: #334155; --shadow: #0284c7; --insta: #e1306c; }
+        :root { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --accent: #38bdf8; --border: #334155; --shadow: #0284c7; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
         
-        /* GİRİŞ EKRANI */
         #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.5s; }
-        .splash-logo { font-size: 2.5rem; font-weight: 800; color: var(--accent); }
+        .app-card { background: var(--card); padding: 1.5rem; border-radius: 35px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); width: 90%; max-width: 340px; text-align: center; border: 1px solid var(--border); position: relative; height: 620px; display: flex; flex-direction: column; justify-content: center; z-index: 10; }
 
-        /* UYGULAMA KARTI */
-        .app-card { background: var(--card); padding: 1.5rem; border-radius: 35px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); width: 90%; max-width: 340px; text-align: center; border: 1px solid var(--border); position: relative; height: 580px; display: flex; flex-direction: column; justify-content: center; z-index: 10; }
+        /* SEVİYE ROZETİ */
+        .level-badge { background: linear-gradient(45deg, #f59e0b, #ef4444); color: white; font-size: 0.7rem; padding: 4px 10px; border-radius: 20px; font-weight: 800; display: inline-block; margin-bottom: 5px; }
 
-        /* RENKLİ MOTİVASYON BLOĞU */
         .quote-container { 
             background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(139, 92, 246, 0.2));
-            border: 2px solid var(--accent); padding: 15px; border-radius: 20px; margin: 15px 0; cursor: pointer; transition: 0.2s; box-shadow: 0 5px 15px rgba(56, 189, 248, 0.1);
+            border: 2px solid var(--accent); padding: 12px; border-radius: 20px; margin: 10px 0; cursor: pointer; transition: 0.2s;
         }
-        .quote-container:active { transform: scale(0.95); }
-        #quoteText { font-size: 0.95rem; font-weight: 600; color: #fff; line-height: 1.3; }
-
-        /* 3D BUTONLAR */
+        
         .main-btn { 
-            background: var(--accent); color: #fff; padding: 14px; border-radius: 16px; font-weight: 800; width: 100%; margin-top: 12px; border: none; cursor: pointer; 
+            background: var(--accent); color: #fff; padding: 12px; border-radius: 16px; font-weight: 800; width: 100%; margin-top: 10px; border: none; cursor: pointer; 
             box-shadow: 0 5px 0 var(--shadow); transition: 0.1s; position: relative; top: 0;
         }
         .main-btn:active { top: 4px; box-shadow: 0 1px 0 var(--shadow); }
 
-        /* ÖZEL MÜZİK BUTONU */
-        .music-btn-special {
-            background: #1e293b; color: var(--accent); border: 2px solid var(--accent);
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.3), inset 0 0 5px rgba(56, 189, 248, 0.2);
-        }
+        .music-btn-special { background: #1e293b; color: var(--accent); border: 2px solid var(--accent); }
         .music-btn-special.playing { background: var(--accent); color: white; box-shadow: 0 0 20px var(--accent); }
 
-        /* INSTAGRAM BUTONU */
-        .insta-btn { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); box-shadow: 0 5px 0 #831843 !important; margin-top: 15px; }
-
-        .logo-circle { width: 45px; height: 45px; background: linear-gradient(135deg, #0284c7, #38bdf8); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; }
+        .logo-circle { width: 40px; height: 40px; background: linear-gradient(135deg, #0284c7, #38bdf8); border-radius: 50%; margin: 0 auto 5px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; }
         .stats-row { display: flex; justify-content: space-around; margin-bottom: 10px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 20px; border: 1px solid var(--border); }
-        .stat-val { display: block; font-size: 1rem; color: var(--accent); font-weight: 800; }
+        .stat-val { display: block; font-size: 0.9rem; color: var(--accent); font-weight: 800; }
         
-        .settings-icon { position: absolute; top: 25px; right: 25px; font-size: 1.5rem; cursor: pointer; z-index: 100; }
+        .settings-icon { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; z-index: 100; }
         .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 110; border-radius: 35px; backdrop-filter: blur(5px); }
-        .side-menu { position: absolute; top: 0; right: 0; width: 75%; height: 100%; background: var(--card); z-index: 120; border-radius: 0 35px 35px 0; padding: 25px; border-left: 1px solid var(--border); text-align: left; }
+        .side-menu { position: absolute; top: 0; right: 0; width: 80%; height: 100%; background: var(--card); z-index: 120; border-radius: 0 35px 35px 0; padding: 20px; border-left: 1px solid var(--border); text-align: left; overflow-y: auto; }
         
         .hidden { display: none !important; }
-        input { width: 100%; padding: 12px; border-radius: 15px; border: 2px solid var(--border); background: var(--bg); color: var(--text); margin: 8px 0; outline: none; }
-        .timer-text { font-size: 4rem; font-weight: 900; color: var(--accent); margin: 10px 0; }
+        input { width: 100%; padding: 10px; border-radius: 12px; border: 2px solid var(--border); background: var(--bg); color: var(--text); margin: 5px 0; outline: none; }
+        .timer-text { font-size: 3.5rem; font-weight: 900; color: var(--accent); margin: 5px 0; }
         
-        .emoji-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0; }
-        .emoji-item { background: var(--bg); padding: 8px; border-radius: 12px; cursor: pointer; font-size: 1.2rem; border: 2px solid transparent; text-align: center; box-shadow: 0 3px 0 var(--border); }
-        .emoji-item.active { border-color: var(--accent); box-shadow: 0 3px 0 var(--accent); background: rgba(56, 189, 248, 0.1); }
+        .emoji-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin: 10px 0; }
+        .emoji-item { background: var(--bg); padding: 8px; border-radius: 12px; cursor: pointer; font-size: 1.1rem; border: 2px solid transparent; text-align: center; }
+        .emoji-item.active { border-color: var(--accent); background: rgba(56, 189, 248, 0.1); }
+        
+        .stats-detail { font-size: 0.8rem; background: var(--bg); padding: 10px; border-radius: 15px; margin: 10px 0; border: 1px solid var(--border); }
     </style>
 </head>
 <body>
 
     <div id="splashScreen">
         <div class="splash-logo">DERİN ODAK</div>
-        <p style="color:var(--accent); margin-top:10px;">@senol.altunn Özel Seri</p>
+        <p style="color:var(--accent); margin-top:10px;">@senol.altunn PRO v3</p>
     </div>
 
     <div class="app-card">
@@ -75,18 +65,25 @@
         
         <div id="menuOverlay" class="overlay hidden" onclick="toggleMenu(false)">
             <div class="side-menu" onclick="event.stopPropagation()">
-                <h3 style="margin-top:0;">Ayarlar ⚙️</h3>
-                <p id="userTag" style="color:var(--accent); font-weight:bold; margin-bottom:20px;"></p>
+                <h3 style="margin:0;">Ayarlar ⚙️</h3>
+                <div id="levelTag" class="level-badge">YÜKLENİYOR...</div>
+                <p id="userTag" style="color:var(--accent); font-weight:bold; margin:5px 0 15px 0;"></p>
                 
-                <p style="font-size:0.8rem; margin-bottom:5px;">Müzik & Atmosfer</p>
+                <div class="stats-detail">
+                    <div style="margin-bottom:5px;">📊 <b>Detaylı Rapor</b></div>
+                    <div>Toplam Süre: <span id="totalMins" style="color:var(--accent);">0</span> dk</div>
+                    <div>Son Rekor: <span id="recordVal" style="color:var(--accent);">0</span> seviye</div>
+                </div>
+
+                <p style="font-size:0.75rem; margin-bottom:5px;">Atmosfer</p>
                 <button class="main-btn music-btn-special" id="musicBtn" onclick="toggleMusic()">Müziği Başlat 🎵</button>
                 
-                <hr style="border:0; border-top:1px solid var(--border); margin:20px 0;">
+                <hr style="border:0; border-top:1px solid var(--border); margin:15px 0;">
                 
                 <button class="main-btn" style="background:#ef4444; box-shadow:0 5px 0 #991b1b;" onclick="logout()">ÇIKIŞ YAP</button>
                 
                 <a href="https://instagram.com/senol.altunn" target="_blank" style="text-decoration:none;">
-                    <button class="main-btn insta-btn">Senol Altunn 📸</button>
+                    <button class="main-btn" style="background:linear-gradient(45deg, #f09433, #bc1888); box-shadow:0 5px 0 #831843;">Senol Altunn 📸</button>
                 </a>
             </div>
         </div>
@@ -106,10 +103,11 @@
         </div>
 
         <div id="mainScreen" class="hidden">
-            <h3 id="welcomeText">SELAM!</h3>
+            <div id="userTitle" class="level-badge">BAŞLANGIÇ</div>
+            <h3 id="welcomeText" style="margin-top:5px;">SELAM!</h3>
             <div class="quote-container" onclick="newQuote()">
                 <div id="quoteText">"Başlamak için mükemmel olmayı bekleme!"</div>
-                <p style="font-size:0.6rem; margin-top:8px; opacity:0.6;">Sözü değiştir ✨</p>
+                <p style="font-size:0.6rem; margin-top:5px; opacity:0.6;">Yeni Söz Al 🌀</p>
             </div>
             <button class="main-btn" onclick="showScreen('goalScreen')">YENİ ODAK BAŞLAT</button>
         </div>
@@ -126,13 +124,15 @@
         </div>
 
         <div id="focusScreen" class="hidden">
-            <h2 id="focusTitle">🚀 Odaklan</h2>
+            <h2 id="focusTitle" style="margin-bottom:0;">🚀 Odaklan</h2>
             <h1 class="timer-text" id="timer">25:00</h1>
+            <p style="font-size:0.8rem; opacity:0.7;">Vazgeçme, bitince zil çalacak! 🔔</p>
             <button class="main-btn" onclick="finishGoal()">BİTİRDİM!</button>
         </div>
     </div>
 
     <audio id="bgMusic" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+    <audio id="bellSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
 
     <script>
         const firebaseConfig = {
@@ -147,80 +147,33 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        let userData = { xp: 0, totalGoals: 0, streak: 0, name: "" };
-        const quotes = ["Odaklan, başaracaksın!", "Bugün senin günün!", "Zihnini serbest bırak.", "Asla pes etme.", "Senol.altunn sizi izliyor! 🚀"];
+        let userData = { xp: 0, totalGoals: 0, streak: 0, name: "", totalTime: 0 };
+        const quotes = ["Odaklan, başaracaksın!", "Bugün senin günün!", "Zihnini serbest bırak.", "Senol.altunn sizi izliyor! 🚀"];
 
-        function newQuote() {
-            document.getElementById('quoteText').innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
-        }
-
-        function toggleMusic() {
-            const m = document.getElementById('bgMusic');
-            const btn = document.getElementById('musicBtn');
-            if(m.paused) { 
-                m.play(); 
-                btn.classList.add('playing');
-                btn.innerText = "Müzik Çalıyor... ⏸️"; 
-            } else { 
-                m.pause(); 
-                btn.classList.remove('playing');
-                btn.innerText = "Müziği Başlat 🎵"; 
-            }
-        }
-
-        window.onload = () => {
-            const saved = localStorage.getItem('derinOdakUser');
-            if(saved) {
-                database.ref('users/' + saved).once('value').then(s => {
-                    if(s.val()) { userData = s.val(); updateUI(); }
-                });
-            }
-            setTimeout(() => {
-                const sp = document.getElementById('splashScreen');
-                sp.style.opacity = '0';
-                setTimeout(() => {
-                    sp.style.display = 'none';
-                    if(saved) { 
-                        showScreen('mainScreen'); 
-                        document.getElementById('settingsBtn').classList.remove('hidden');
-                    }
-                }, 500);
-            }, 2500);
-        };
-
-        function connect() {
-            const n = document.getElementById('userNameInput').value.trim().toLowerCase();
-            if(!n) return;
-            database.ref('users/' + n).once('value').then(s => {
-                userData = s.val() || { xp:0, totalGoals:0, streak:0, name:n };
-                if(!s.val()) database.ref('users/' + n).set(userData);
-                localStorage.setItem('derinOdakUser', n);
-                updateUI();
-                showScreen('mainScreen');
-                document.getElementById('settingsBtn').classList.remove('hidden');
-            });
+        function getLevelInfo(xp) {
+            if(xp < 500) return { title: "🥉 Çaylak", color: "#94a3b8" };
+            if(xp < 2000) return { title: "🥈 Odak Ustası", color: "#38bdf8" };
+            if(xp < 5000) return { title: "🥇 Derin Guru", color: "#f59e0b" };
+            return { title: "💎 EFSANE", color: "#ef4444" };
         }
 
         function updateUI() {
+            const level = getLevelInfo(userData.xp);
             document.getElementById('welcomeText').innerText = "SELAM, " + userData.name.toUpperCase();
             document.getElementById('xpVal').innerText = userData.xp;
             document.getElementById('totalVal').innerText = userData.totalGoals;
             document.getElementById('streakVal').innerText = userData.streak;
             document.getElementById('userTag').innerText = "@" + userData.name;
+            document.getElementById('totalMins').innerText = (userData.totalGoals * 25);
+            document.getElementById('levelTag').innerText = level.title;
+            document.getElementById('userTitle').innerText = level.title;
+            document.getElementById('userTitle').style.background = level.color;
         }
 
-        function showScreen(id) {
-            ['loginScreen','mainScreen','goalScreen','focusScreen'].forEach(s => {
-                document.getElementById(s).classList.add('hidden');
-            });
-            document.getElementById(id).classList.remove('hidden');
-        }
-
-        function toggleMenu(open) { document.getElementById('menuOverlay').classList.toggle('hidden', !open); }
-        function selectEmoji(el, emoji) {
-            document.querySelectorAll('.emoji-item').forEach(i => i.classList.remove('active'));
-            el.classList.add('active');
-            window.currentEmoji = emoji;
+        function toggleMusic() {
+            const m = document.getElementById('bgMusic'), btn = document.getElementById('musicBtn');
+            if(m.paused) { m.play(); btn.classList.add('playing'); btn.innerText = "Müzik Açık ⏸️"; }
+            else { m.pause(); btn.classList.remove('playing'); btn.innerText = "Müziği Başlat 🎵"; }
         }
 
         function startFocus() {
@@ -228,21 +181,58 @@
             document.getElementById('focusTitle').innerText = (window.currentEmoji || "📚") + " " + task;
             showScreen('focusScreen');
             let t = 25*60;
-            const timer = setInterval(() => {
+            window.focusTimer = setInterval(() => {
                 let m=Math.floor(t/60), s=t%60;
                 document.getElementById('timer').innerText = (m<10?"0"+m:m)+":"+(s<10?"0"+s:s);
-                if(t-- <= 0) { clearInterval(timer); finishGoal(); }
+                if(t-- <= 0) { clearInterval(window.focusTimer); finishGoal(); }
             }, 1000);
         }
 
         function finishGoal() {
-            confetti({ particleCount: 150 });
+            clearInterval(window.focusTimer);
+            document.getElementById('bellSound').play();
+            confetti({ particleCount: 200, spread: 70 });
             userData.xp+=100; userData.totalGoals+=1; userData.streak+=1;
             database.ref('users/'+userData.name).set(userData);
             updateUI(); showScreen('mainScreen');
         }
 
+        // Genel Fonksiyonlar
+        function newQuote() { document.getElementById('quoteText').innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`; }
+        function showScreen(id) { 
+            ['loginScreen','mainScreen','goalScreen','focusScreen'].forEach(s => document.getElementById(s).classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+        }
+        function toggleMenu(open) { document.getElementById('menuOverlay').classList.toggle('hidden', !open); }
+        function selectEmoji(el, emoji) { 
+            document.querySelectorAll('.emoji-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active'); window.currentEmoji = emoji; 
+        }
+        function connect() {
+            const n = document.getElementById('userNameInput').value.trim().toLowerCase();
+            if(!n) return;
+            database.ref('users/' + n).once('value').then(s => {
+                userData = s.val() || { xp:0, totalGoals:0, streak:0, name:n };
+                if(!s.val()) database.ref('users/' + n).set(userData);
+                localStorage.setItem('derinOdakUser', n);
+                updateUI(); showScreen('mainScreen');
+                document.getElementById('settingsBtn').classList.remove('hidden');
+            });
+        }
         function logout() { localStorage.removeItem('derinOdakUser'); location.reload(); }
+        window.onload = () => {
+            const saved = localStorage.getItem('derinOdakUser');
+            if(saved) {
+                database.ref('users/' + saved).once('value').then(s => { if(s.val()){ userData = s.val(); updateUI(); }});
+            }
+            setTimeout(() => {
+                document.getElementById('splashScreen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('splashScreen').style.display = 'none';
+                    if(saved) { showScreen('mainScreen'); document.getElementById('settingsBtn').classList.remove('hidden'); }
+                }, 500);
+            }, 2500);
+        };
     </script>
 </body>
 </html>
