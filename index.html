@@ -11,56 +11,44 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     
     <style>
-        :root { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --accent: #38bdf8; --border: #334155; --shadow: #0ea5e9; }
+        :root { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --accent: #38bdf8; --border: #334155; --shadow: #0284c7; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
         
-        /* SPLASH SCREEN */
-        #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 2000; transition: 0.8s; }
-        .splash-logo { font-size: 2.5rem; font-weight: 800; color: var(--accent); text-shadow: 0 0 20px rgba(56, 189, 248, 0.5); }
+        /* SPLASH SCREEN - TAKILMAYA KARŞI GÜÇLENDİRİLDİ */
+        #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; opacity: 1; transition: opacity 0.5s ease; }
+        .splash-logo { font-size: 2.5rem; font-weight: 800; color: var(--accent); margin-bottom: 20px; }
+        .loader-bar-wrap { width: 150px; height: 4px; background: var(--border); border-radius: 10px; overflow: hidden; }
+        .loader-bar { width: 0%; height: 100%; background: var(--accent); animation: load 2.5s forwards linear; }
+        @keyframes load { to { width: 100%; } }
 
-        /* 3D BUTONLAR */
-        .main-btn { 
-            background: var(--accent); color: #fff; padding: 14px; border-radius: 16px; font-weight: 800; width: 100%; margin-top: 12px; border: none; cursor: pointer; font-size: 0.95rem;
-            box-shadow: 0 5px 0 var(--shadow); transition: 0.1s; position: relative; top: 0;
-        }
-        .main-btn:active { top: 4px; box-shadow: 0 1px 0 var(--shadow); background: #0284c7; }
-
-        .app-card { background: var(--card); padding: 1.5rem; border-radius: 35px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); width: 90%; max-width: 340px; text-align: center; border: 1px solid var(--border); position: relative; height: 580px; display: flex; flex-direction: column; justify-content: center; visibility: hidden; opacity: 0; transition: 0.5s; }
-        .app-ready { visibility: visible; opacity: 1; }
+        /* UYGULAMA KARTI */
+        .app-card { background: var(--card); padding: 1.5rem; border-radius: 35px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); width: 90%; max-width: 340px; text-align: center; border: 1px solid var(--border); position: relative; height: 580px; display: flex; flex-direction: column; justify-content: center; opacity: 0; transform: scale(0.9); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .app-visible { opacity: 1; transform: scale(1); }
 
         .hidden { display: none !important; }
-        .logo-circle { width: 55px; height: 55px; background: linear-gradient(135deg, #0284c7, #38bdf8); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .main-btn { background: var(--accent); color: #fff; padding: 14px; border-radius: 16px; font-weight: 800; width: 100%; margin-top: 12px; border: none; cursor: pointer; box-shadow: 0 5px 0 var(--shadow); transition: 0.1s; position: relative; top: 0; }
+        .main-btn:active { top: 4px; box-shadow: 0 1px 0 var(--shadow); }
+
+        .logo-circle { width: 55px; height: 55px; background: linear-gradient(135deg, #0284c7, #38bdf8); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; }
         .stats-row { display: flex; justify-content: space-around; margin-bottom: 15px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 20px; border: 1px solid var(--border); }
         .stat-val { display: block; font-size: 1.1rem; color: var(--accent); font-weight: 800; }
         
-        input { width: 100%; padding: 14px; border-radius: 15px; border: 2px solid var(--border); background: var(--bg); color: var(--text); margin: 10px 0; font-size: 16px; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--accent); box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); }
-
-        .timer-text { font-size: 4.5rem; font-weight: 900; color: var(--accent); margin: 10px 0; text-shadow: 0 0 30px rgba(56, 189, 248, 0.3); }
-
-        /* AYARLAR VE SES MENU */
-        .settings-icon { position: absolute; top: 25px; right: 25px; font-size: 1.6rem; cursor: pointer; z-index: 100; transition: 0.3s; }
-        .settings-icon:hover { transform: rotate(45deg); }
-        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 110; border-radius: 35px; backdrop-filter: blur(4px); }
-        .side-menu { position: absolute; top: 0; right: 0; width: 80%; height: 100%; background: var(--card); z-index: 120; border-radius: 0 35px 35px 0; padding: 25px; border-left: 1px solid var(--border); overflow-y: auto; }
-
+        input { width: 100%; padding: 14px; border-radius: 15px; border: 2px solid var(--border); background: var(--bg); color: var(--text); margin: 10px 0; font-size: 16px; outline: none; }
+        .timer-text { font-size: 4.5rem; font-weight: 900; color: var(--accent); margin: 10px 0; }
+        .settings-icon { position: absolute; top: 25px; right: 25px; font-size: 1.6rem; cursor: pointer; z-index: 100; }
+        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 110; border-radius: 35px; backdrop-filter: blur(5px); }
+        .side-menu { position: absolute; top: 0; right: 0; width: 80%; height: 100%; background: var(--card); z-index: 120; border-radius: 0 35px 35px 0; padding: 25px; border-left: 1px solid var(--border); }
         .emoji-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 15px 0; }
-        .emoji-item { background: var(--bg); padding: 10px; border-radius: 15px; cursor: pointer; font-size: 1.3rem; border: 2px solid transparent; transition: 0.2s; box-shadow: 0 4px 0 var(--border); }
-        .emoji-item:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--border); }
-        .emoji-item.active { border-color: var(--accent); background: rgba(56, 189, 248, 0.1); box-shadow: 0 4px 0 var(--accent); }
-
-        .music-btn { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 10px; margin: 5px 0; border-radius: 12px; width: 100%; cursor: pointer; font-size: 0.85rem; text-align: left; }
-        .music-btn.playing { border-color: var(--accent); color: var(--accent); font-weight: bold; }
-        
-        .insta-btn { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white !important; border: none !important; margin-top: 15px; }
+        .emoji-item { background: var(--bg); padding: 10px; border-radius: 15px; cursor: pointer; font-size: 1.3rem; border: 2px solid transparent; box-shadow: 0 4px 0 var(--border); transition: 0.2s; }
+        .emoji-item.active { border-color: var(--accent); box-shadow: 0 4px 0 var(--accent); }
     </style>
 </head>
 <body>
 
     <div id="splashScreen">
         <div class="splash-logo">DERİN ODAK</div>
-        <div style="width: 150px; height: 4px; background: #1e293b; border-radius: 10px; margin-top: 20px; overflow: hidden;">
-            <div style="width: 0%; height: 100%; background: #38bdf8; animation: load 2.5s forwards linear;"></div>
+        <div class="loader-bar-wrap">
+            <div class="loader-bar"></div>
         </div>
     </div>
 
@@ -69,26 +57,14 @@
         
         <div id="menuOverlay" class="overlay hidden" onclick="toggleMenu(false)">
             <div class="side-menu" onclick="event.stopPropagation()">
-                <h3 style="margin-bottom:15px;">Ayarlar ⚙️</h3>
-                
-                <p style="font-size:0.8rem; color:var(--accent); margin-bottom:5px;">Müzik & Atmosfer 🎵</p>
-                <div id="musicContainer">
-                    <button class="music-btn" onclick="playTrack('lofi', this)">☕ Lofi Beats</button>
-                    <button class="music-btn" onclick="playTrack('rain', this)">🌧️ Yağmur Sesi</button>
-                    <button class="music-btn" onclick="playTrack('forest', this)">🌲 Gece Orman</button>
-                    <button class="music-btn" onclick="playTrack('none', this)">🔇 Sesi Kapat</button>
-                </div>
-
-                <hr style="border:0; border-top:1px solid var(--border); margin: 20px 0;">
-                
-                <p id="userTag" style="font-size:0.9rem; font-weight:bold;"></p>
-                <button class="main-btn" style="background:#ef4444; box-shadow: 0 5px 0 #b91c1c;" onclick="logout()">ÇIKIŞ YAP</button>
-                
-                <a href="https://instagram.com/BURAYA_INSTAGRAM_ADRESIN" target="_blank" style="text-decoration:none;">
-                    <button class="main-btn insta-btn">İnstagram'dan Takip Et 📸</button>
+                <h3>Ayarlar ⚙️</h3>
+                <p id="userTag" style="color:var(--accent); font-weight:bold;"></p>
+                <hr style="border:0; border-top:1px solid var(--border); margin:20px 0;">
+                <button class="main-btn" style="background:#ef4444; box-shadow:0 5px 0 #991b1b;" onclick="logout()">ÇIKIŞ YAP</button>
+                <a href="https://instagram.com/SİZİN_ADRESİNİZ" target="_blank" style="text-decoration:none;">
+                    <button class="main-btn" style="background:linear-gradient(45deg, #f09433, #bc1888); box-shadow:0 5px 0 #831843; margin-top:20px;">Instagram 📸</button>
                 </a>
-                
-                <p style="font-size:0.7rem; color:#64748b; margin-top:20px;">Kapatmak için sola tıkla</p>
+                <p style="font-size:0.7rem; color:#64748b; margin-top:30px;">Kapatmak için sola dokun</p>
             </div>
         </div>
 
@@ -107,34 +83,28 @@
         </div>
 
         <div id="mainScreen" class="hidden">
-            <h3 id="welcomeText">Yükleniyor...</h3>
-            <p id="quoteBox" style="font-size:0.8rem; color:#94a3b8; min-height:40px;">"Başlamak, başarmanın yarısıdır!"</p>
-            <button class="main-btn" onclick="showScreen('goalScreen')">ODAKLANMAYI BAŞLAT</button>
+            <h3 id="welcomeText">SELAM!</h3>
+            <p id="quoteBox" style="font-size:0.8rem; color:#94a3b8; min-height:40px;">Odaklanmaya hazır mısın?</p>
+            <button class="main-btn" onclick="showScreen('goalScreen')">YENİ ODAK BAŞLAT</button>
         </div>
 
         <div id="goalScreen" class="hidden">
             <input type="text" id="targetInput" placeholder="Neye odaklanıyoruz?">
-            <div class="emoji-grid">
+            <div class="emoji-grid" id="emojiGrid">
                 <div class="emoji-item active" onclick="selectEmoji(this, '📚')">📚</div>
                 <div class="emoji-item" onclick="selectEmoji(this, '💻')">💻</div>
                 <div class="emoji-item" onclick="selectEmoji(this, '🧘')">🧘</div>
                 <div class="emoji-item" onclick="selectEmoji(this, '😔')">😔</div>
-                <div class="emoji-item" onclick="selectEmoji(this, '🚀')">🚀</div>
-                <div class="emoji-item" onclick="selectEmoji(this, '🎨')">🎨</div>
-                <div class="emoji-item" onclick="selectEmoji(this, '🏋️')">🏋️</div>
-                <div class="emoji-item" onclick="selectEmoji(this, '💡')">💡</div>
             </div>
-            <button class="main-btn" onclick="startFocus()">ODAKLANMAYI BAŞLAT</button>
+            <button class="main-btn" onclick="startFocus()">BAŞLAT</button>
         </div>
 
         <div id="focusScreen" class="hidden">
-            <h2 id="focusTitle" style="color:var(--accent);">Odaklan...</h2>
+            <h2 id="focusTitle">🚀 Odaklan</h2>
             <h1 class="timer-text" id="timer">25:00</h1>
             <button class="main-btn" onclick="finishGoal()">BİTİRDİM!</button>
         </div>
     </div>
-
-    <audio id="player" loop></audio>
 
     <script>
         const firebaseConfig = {
@@ -152,6 +122,17 @@
         let userData = { xp: 0, totalGoals: 0, streak: 0, name: "" };
         let currentEmoji = "📚";
 
+        // KESİN ÇÖZÜM: Splash Screen Kapatma Fonksiyonu
+        function closeSplash() {
+            const splash = document.getElementById('splashScreen');
+            const app = document.getElementById('appCard');
+            splash.style.opacity = '0';
+            setTimeout(() => {
+                splash.style.display = 'none';
+                app.classList.add('app-visible');
+            }, 500);
+        }
+
         window.onload = () => {
             const saved = localStorage.getItem('derinOdakUser');
             if(saved) {
@@ -159,15 +140,8 @@
                     if(s.val()) { userData = s.val(); updateUI(); }
                 });
             }
-
-            setTimeout(() => {
-                document.getElementById('splashScreen').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('splashScreen').style.display = 'none';
-                    document.getElementById('appCard').classList.add('app-ready');
-                    if(saved) { showScreen('mainScreen'); document.getElementById('settingsBtn').classList.remove('hidden'); }
-                }, 600);
-            }, 2500);
+            // 3 saniye sonra her ne olursa olsun splash'i kapat
+            setTimeout(closeSplash, 3000);
         };
 
         function connect() {
@@ -183,24 +157,10 @@
             });
         }
 
-        function playTrack(type, btn) {
-            const player = document.getElementById('player');
-            const tracks = {
-                lofi: "https://stream.zeno.fm/0r0xa792kwzuv", // Örnek canlı lofi stream
-                rain: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-                forest: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3"
-            };
-            document.querySelectorAll('.music-btn').forEach(b => b.classList.remove('playing'));
-            if(type === 'none') { player.pause(); }
-            else { player.src = tracks[type]; player.play(); btn.classList.add('playing'); }
-        }
-
         function selectEmoji(el, emoji) {
             document.querySelectorAll('.emoji-item').forEach(i => i.classList.remove('active'));
             el.classList.add('active');
             currentEmoji = emoji;
-            if(emoji === '😔') document.getElementById('quoteBox').innerText = "Canın mı sıkkın? Her şey geçer knk, bugün sadece kendine odaklan. 💙";
-            else document.getElementById('quoteBox').innerText = "Zihnini serbest bırak, hedefine kilitlen!";
         }
 
         function showScreen(id) {
@@ -242,8 +202,6 @@
         }
 
         function logout() { localStorage.removeItem('derinOdakUser'); location.reload(); }
-        
-        @keyframes load { to { width: 100%; } }
     </script>
 </body>
 </html>
