@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Derin Odak - Senol Altunn v5.1</title>
+    <title>Derin Odak - Senol Altunn Pro v5.2</title>
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -17,41 +17,41 @@
         #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.5s; }
         .app-card { background: var(--card); padding: 1.5rem; border-radius: 35px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); width: 90%; max-width: 340px; text-align: center; border: 1px solid var(--border); position: relative; height: 620px; display: flex; flex-direction: column; justify-content: center; z-index: 10; overflow: hidden; }
 
-        .time-greeting { font-size: 0.8rem; font-weight: 800; color: var(--accent); margin-bottom: 5px; text-transform: uppercase; }
+        .time-greeting { font-size: 0.75rem; font-weight: 800; color: var(--accent); margin-bottom: 5px; text-transform: uppercase; }
         .level-badge { background: linear-gradient(45deg, #f59e0b, #ef4444); color: white; font-size: 0.7rem; padding: 4px 10px; border-radius: 20px; font-weight: 800; display: inline-block; }
         
+        /* MOTİVASYON BLOĞU (GERİ GELDİ) */
+        .quote-container { 
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(139, 92, 246, 0.15));
+            border: 2px solid var(--accent); padding: 12px; border-radius: 20px; margin: 8px 0; cursor: pointer; transition: 0.2s;
+        }
+        .quote-container:active { transform: scale(0.96); }
+
         /* SOSYAL PANEL */
-        .social-panel { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 200; border-radius: 35px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); transform: translateY(100%); }
+        .social-panel { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 200; border-radius: 35px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; transition: 0.4s ease-in-out; transform: translateY(100%); }
         .social-panel.active { transform: translateY(0); }
         .close-social { position: absolute; top: 20px; left: 20px; font-size: 1.2rem; cursor: pointer; color: var(--accent); font-weight: 800; }
         
-        .leaderboard { background: var(--card); border-radius: 20px; margin-top: 20px; padding: 10px; border: 1px solid var(--border); max-height: 250px; overflow-y: auto; }
-        .leader-item { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid var(--border); font-size: 0.8rem; }
-        .leader-item.me { background: rgba(56, 189, 248, 0.1); border-radius: 10px; color: var(--accent); }
+        .leaderboard { background: var(--card); border-radius: 20px; margin-top: 15px; padding: 10px; border: 1px solid var(--border); max-height: 280px; overflow-y: auto; }
+        .leader-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid var(--border); font-size: 0.85rem; color: #fff; }
+        .leader-item.me { background: rgba(56, 189, 248, 0.2); border-radius: 10px; color: var(--accent); font-weight: 800; }
 
-        .achievement-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
-        .badge-box { background: var(--card); border: 1px solid var(--border); border-radius: 15px; padding: 10px; font-size: 0.6rem; text-align: center; }
-        .badge-box i { font-size: 1.5rem; display: block; margin-bottom: 5px; filter: grayscale(1); opacity: 0.3; }
-        .badge-box.unlocked i { filter: grayscale(0); opacity: 1; }
-
-        /* BUTONLAR & INPUT */
         .main-btn { background: var(--accent); color: #fff; padding: 12px; border-radius: 16px; font-weight: 800; width: 100%; margin-top: 10px; border: none; cursor: pointer; box-shadow: 0 5px 0 var(--shadow); transition: 0.1s; position: relative; top: 0; }
         .main-btn:active { top: 4px; box-shadow: 0 1px 0 var(--shadow); }
-        input { width: 100%; padding: 12px; border-radius: 15px; border: 2px solid var(--border); background: var(--bg); color: var(--text); margin: 10px 0; outline: none; box-sizing: border-box; }
-
-        /* EMOJILER GERİ GELDİ */
+        
         .emoji-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0; }
-        .emoji-item { background: var(--bg); padding: 10px; border-radius: 12px; cursor: pointer; font-size: 1.2rem; border: 2px solid transparent; text-align: center; box-shadow: 0 3px 0 var(--border); }
+        .emoji-item { background: var(--bg); padding: 10px; border-radius: 12px; cursor: pointer; font-size: 1.2rem; border: 2px solid transparent; box-shadow: 0 3px 0 var(--border); }
         .emoji-item.active { border-color: var(--accent); box-shadow: 0 3px 0 var(--accent); background: rgba(56, 189, 248, 0.1); }
 
-        .logo-circle { width: 40px; height: 40px; background: linear-gradient(135deg, #0284c7, #38bdf8); border-radius: 50%; margin: 5px auto; display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; }
-        .stats-row { display: flex; justify-content: space-around; margin-bottom: 10px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 20px; border: 1px solid var(--border); }
-        .stat-val { display: block; font-size: 0.9rem; color: var(--accent); font-weight: 800; }
+        .logo-circle { width: 35px; height: 35px; background: linear-gradient(135deg, #0284c7, #38bdf8); border-radius: 50%; margin: 5px auto; display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; font-size: 0.8rem; }
+        .stats-row { display: flex; justify-content: space-around; margin-bottom: 8px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 20px; border: 1px solid var(--border); }
+        .stat-val { display: block; font-size: 0.85rem; color: var(--accent); font-weight: 800; }
         
         .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 110; border-radius: 35px; backdrop-filter: blur(5px); }
         .side-menu { position: absolute; top: 0; right: 0; width: 80%; height: 100%; background: var(--card); z-index: 120; border-radius: 0 35px 35px 0; padding: 25px; border-left: 1px solid var(--border); text-align: left; }
         
         .hidden { display: none !important; }
+        input { width: 100%; padding: 12px; border-radius: 15px; border: 2px solid var(--border); background: var(--bg); color: var(--text); margin: 5px 0; outline: none; box-sizing: border-box; }
         .timer-text { font-size: 3.5rem; font-weight: 900; color: var(--accent); margin: 10px 0; }
     </style>
 </head>
@@ -68,14 +68,10 @@
         <div id="socialPanel" class="social-panel">
             <div class="close-social" onclick="toggleSocial(false)">← GERİ</div>
             <h3 style="margin-top:50px; color:var(--accent);">Global Liderlik 🏆</h3>
-            <div class="leaderboard" id="leaderboardList"></div>
-
-            <h3 style="margin-top:20px; color:var(--accent); font-size:1rem;">Başarı Rozetleri 🎖️</h3>
-            <div class="achievement-grid">
-                <div class="badge-box" id="badge-1"><i>🥉</i>Çaylak</div>
-                <div class="badge-box" id="badge-2"><i>🥈</i>Usta</div>
-                <div class="badge-box" id="badge-3"><i>🥇</i>Guru</div>
+            <div class="leaderboard" id="leaderboardList">
+                <div class="leader-item">Veriler Çekiliyor...</div>
             </div>
+            <p style="font-size:0.6rem; opacity:0.5; margin-top:10px;">En yüksek XP'ye sahip 10 kullanıcı listelenir.</p>
         </div>
 
         <div id="menuOverlay" class="overlay hidden" onclick="toggleMenu(false)">
@@ -83,11 +79,11 @@
                 <h3>Ayarlar ⚙️</h3>
                 <div id="levelTag" class="level-badge">Yükleniyor...</div>
                 <p id="userTag" style="color:var(--accent); font-weight:bold; margin-bottom:20px;"></p>
-                <button class="main-btn" onclick="toggleSocial(true); toggleMenu(false);">SOSYAL HUB 🏆</button>
+                <button class="main-btn" onclick="toggleSocial(true); toggleMenu(false);">DÜNYA SIRALAMASI 🏆</button>
                 <button class="main-btn" onclick="toggleMusic()">Müzik 🎵</button>
                 <hr style="border:0; border-top:1px solid var(--border); margin:20px 0;">
-                <a href="https://instagram.com/senol.altunn" target="_blank" style="text-decoration:none;"><button class="main-btn" style="background:linear-gradient(45deg, #f09433, #bc1888);">Senol Altunn 📸</button></a>
-                <button class="main-btn" style="background:#ef4444;" onclick="logout()">ÇIKIŞ</button>
+                <a href="https://instagram.com/senol.altunn" target="_blank" style="text-decoration:none;"><button class="main-btn" style="background:linear-gradient(45deg, #f09433, #bc1888);">Instagram Hesabım 📸</button></a>
+                <button class="main-btn" style="background:#ef4444;" onclick="logout()">ÇIKIŞ YAP</button>
             </div>
         </div>
 
@@ -108,13 +104,19 @@
 
         <div id="mainScreen" class="hidden">
             <div id="userTitle" class="level-badge">BAŞLANGIÇ</div>
-            <h3 id="welcomeText" style="margin: 10px 0;">SELAM!</h3>
-            <button class="main-btn" onclick="showScreen('goalScreen')">ODAKLANMAYI BAŞLAT</button>
-            <button class="main-btn" style="background:#6366f1; box-shadow:0 5px 0 #4338ca;" onclick="toggleSocial(true)">LİDERLİK TABLOSU 🏆</button>
+            <h3 id="welcomeText" style="margin: 5px 0;">SELAM!</h3>
+            
+            <div class="quote-container" onclick="newQuote()">
+                <div id="quoteText" style="font-size:0.85rem; font-weight:600; color:#fff;">"Başlamak için mükemmel olmayı bekleme!"</div>
+                <p style="font-size:0.6rem; margin-top:5px; opacity:0.6;">Sözü Değiştir ✨</p>
+            </div>
+
+            <button class="main-btn" onclick="showScreen('goalScreen')">YENİ HEDEF BAŞLAT</button>
+            <button class="main-btn" style="background:#6366f1; box-shadow:0 5px 0 #4338ca;" onclick="toggleSocial(true)">DÜNYA SIRALAMASI 🏆</button>
         </div>
 
         <div id="goalScreen" class="hidden">
-            <input type="text" id="targetInput" placeholder="Hedefin ne?">
+            <input type="text" id="targetInput" placeholder="Şu an neye odaklanacaksın?">
             <div class="emoji-grid">
                 <div class="emoji-item active" onclick="selectEmoji(this, '📚')">📚</div>
                 <div class="emoji-item" onclick="selectEmoji(this, '💻')">💻</div>
@@ -125,7 +127,7 @@
         </div>
 
         <div id="focusScreen" class="hidden">
-            <h2 id="focusTitle" style="margin-bottom:0;">🚀 Odaklan</h2>
+            <h2 id="focusTitle" style="margin-bottom:0; font-size:1.2rem;">🚀 Odaklan</h2>
             <h1 class="timer-text" id="timer">25:00</h1>
             <button class="main-btn" onclick="finishGoal()">BİTİRDİM!</button>
         </div>
@@ -148,6 +150,7 @@
         const database = firebase.database();
 
         let userData = { xp: 0, totalGoals: 0, streak: 0, name: "" };
+        const quotes = ["Odaklan, başaracaksın!", "Gelecek bugün ne yaptığına bağlı.", "Zihnini serbest bırak.", "Senol.altunn sizi izliyor! 🚀", "Harekete geçmek için en doğru zaman şimdi!"];
         window.currentEmoji = "📚";
 
         function updateUI() {
@@ -160,16 +163,28 @@
             document.getElementById('userTag').innerText = "@" + userData.name;
             document.getElementById('levelTag').innerText = level;
             document.getElementById('userTitle').innerText = level;
-            
-            if(userData.xp >= 500) document.getElementById('badge-1').classList.add('unlocked');
-            if(userData.xp >= 2000) document.getElementById('badge-2').classList.add('unlocked');
-            if(userData.xp >= 5000) document.getElementById('badge-3').classList.add('unlocked');
         }
 
-        function selectEmoji(el, emoji) {
-            document.querySelectorAll('.emoji-item').forEach(i => i.classList.remove('active'));
-            el.classList.add('active');
-            window.currentEmoji = emoji;
+        function newQuote() { 
+            document.getElementById('quoteText').innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`; 
+        }
+
+        function loadLeaderboard() {
+            database.ref('users').orderByChild('xp').limitToLast(10).once('value', (snapshot) => {
+                const list = document.getElementById('leaderboardList');
+                list.innerHTML = "";
+                let users = [];
+                snapshot.forEach(child => {
+                    users.push(child.val());
+                });
+                users.reverse().forEach((u, i) => {
+                    const isMe = u.name.toLowerCase() === userData.name.toLowerCase() ? "me" : "";
+                    list.innerHTML += `<div class="leader-item ${isMe}">
+                        <span>${i+1}. @${u.name}</span>
+                        <span>${u.xp} XP</span>
+                    </div>`;
+                });
+            });
         }
 
         function startFocus() {
@@ -190,32 +205,7 @@
             document.getElementById('bellSound').play();
             userData.xp += 100; userData.totalGoals += 1; userData.streak += 1;
             database.ref('users/' + userData.name).set(userData);
-            updateUI();
-            showScreen('mainScreen');
-        }
-
-        function showScreen(id) {
-            ['loginScreen','mainScreen','goalScreen','focusScreen'].forEach(s => document.getElementById(s).classList.add('hidden'));
-            document.getElementById(id).classList.remove('hidden');
-        }
-
-        function toggleSocial(open) {
-            document.getElementById('socialPanel').classList.toggle('active', open);
-            if(open) loadLeaderboard();
-        }
-
-        function loadLeaderboard() {
-            database.ref('users').orderByChild('xp').limitToLast(10).once('value', (s) => {
-                const list = document.getElementById('leaderboardList');
-                list.innerHTML = "";
-                let users = [];
-                s.forEach(child => users.push(child.val()));
-                users.reverse().forEach((u, i) => {
-                    list.innerHTML += `<div class="leader-item ${u.name === userData.name ? 'me' : ''}">
-                        <span>${i+1}. @${u.name}</span><span>${u.xp} XP</span>
-                    </div>`;
-                });
-            });
+            updateUI(); showScreen('mainScreen');
         }
 
         function connect() {
@@ -230,6 +220,15 @@
             });
         }
 
+        function selectEmoji(el, emoji) {
+            document.querySelectorAll('.emoji-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active'); window.currentEmoji = emoji;
+        }
+        function showScreen(id) {
+            ['loginScreen','mainScreen','goalScreen','focusScreen'].forEach(s => document.getElementById(s).classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+        }
+        function toggleSocial(open) { document.getElementById('socialPanel').classList.toggle('active', open); if(open) loadLeaderboard(); }
         function toggleMenu(open) { document.getElementById('menuOverlay').classList.toggle('hidden', !open); }
         function toggleMusic() { const m = document.getElementById('bgMusic'); m.paused ? m.play() : m.pause(); }
         function logout() { localStorage.removeItem('derinOdakUser'); location.reload(); }
@@ -244,7 +243,7 @@
             setTimeout(() => {
                 document.getElementById('splashScreen').style.opacity = '0';
                 setTimeout(() => document.getElementById('splashScreen').style.display = 'none', 500);
-            }, 2500);
+            }, 2000);
         };
     </script>
 </body>
