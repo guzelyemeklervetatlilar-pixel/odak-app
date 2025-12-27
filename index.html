@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Derin Odak - Pro v2</title>
+    <title>Derin Odak - Zen Mode</title>
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -13,26 +13,49 @@
     <style>
         :root { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --accent: #38bdf8; --border: #334155; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
-        .app-card { background: var(--card); padding: 1.5rem; border-radius: 35px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); width: 90%; max-width: 340px; text-align: center; border: 1px solid var(--border); position: relative; }
+        .app-card { background: var(--card); padding: 1.5rem; border-radius: 35px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); width: 90%; max-width: 340px; text-align: center; border: 1px solid var(--border); position: relative; height: 550px; display: flex; flex-direction: column; justify-content: center; }
         .hidden { display: none !important; }
-        .main-btn { background: var(--accent); color: #fff; padding: 16px; border-radius: 18px; font-weight: 800; width: 100%; margin-top: 10px; border:none; cursor:pointer; font-size: 1rem; transition: 0.3s; }
-        .main-btn:active { transform: scale(0.95); }
-        .logo-circle { width: 60px; height: 60px; background: linear-gradient(135deg, #0284c7, #38bdf8); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; font-size: 1.5rem; }
-        .stats-row { display: flex; justify-content: space-around; margin-bottom: 20px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 20px; }
-        .stat-val { display: block; font-size: 1.1rem; color: var(--accent); font-weight: 800; }
-        input { width: 100%; padding: 14px; border-radius: 15px; border: 2px solid var(--border); background: var(--bg); color: var(--text); margin: 10px 0; font-size: 16px; outline: none; }
-        .timer-text { font-size: 4.5rem; font-weight: 900; color: var(--accent); margin: 15px 0; }
-        .quote-box { font-size: 0.85rem; color: #94a3b8; margin: 15px 0; min-height: 40px; line-height: 1.4; }
-        .settings-icon { position: absolute; top: 20px; right: 25px; font-size: 1.5rem; cursor: pointer; z-index: 10; }
-        .emoji-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 15px 0; }
-        .emoji-item { background: var(--bg); padding: 10px; border-radius: 12px; cursor: pointer; font-size: 1.2rem; border: 2px solid transparent; }
-        .emoji-item.active { border-color: var(--accent); background: rgba(56, 189, 248, 0.1); }
+        .main-btn { background: var(--accent); color: #fff; padding: 14px; border-radius: 18px; font-weight: 800; width: 100%; margin-top: 10px; border:none; cursor:pointer; font-size: 0.9rem; transition: 0.3s; }
+        .logo-circle { width: 50px; height: 50px; background: linear-gradient(135deg, #0284c7, #38bdf8); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; }
+        .stats-row { display: flex; justify-content: space-around; margin-bottom: 15px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 20px; }
+        .stat-val { display: block; font-size: 1rem; color: var(--accent); font-weight: 800; }
+        input { width: 100%; padding: 12px; border-radius: 15px; border: 2px solid var(--border); background: var(--bg); color: var(--text); margin: 8px 0; font-size: 15px; outline: none; }
+        .timer-text { font-size: 4rem; font-weight: 900; color: var(--accent); margin: 10px 0; }
+        .quote-box { font-size: 0.8rem; color: #94a3b8; margin: 10px 0; min-height: 35px; }
+        
+        /* Sağ Üst Ayarlar */
+        .settings-icon { position: absolute; top: 20px; right: 20px; font-size: 1.4rem; cursor: pointer; z-index: 100; }
+        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 90; border-radius: 35px; }
+        .side-menu { position: absolute; top: 0; right: 0; width: 70%; height: 100%; background: var(--card); z-index: 95; border-radius: 0 35px 35px 0; padding: 20px; box-sizing: border-box; border-left: 1px solid var(--border); }
+        
+        /* Emojiler */
+        .emoji-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0; }
+        .emoji-item { background: var(--bg); padding: 8px; border-radius: 12px; cursor: pointer; border: 2px solid transparent; }
+        .emoji-item.active { border-color: var(--accent); }
+        
+        /* Müzik Listesi */
+        .music-item { background: var(--bg); padding: 10px; margin: 5px 0; border-radius: 12px; cursor: pointer; border: 1px solid var(--border); font-size: 0.8rem; }
+        .music-item.active { border-color: var(--accent); color: var(--accent); }
+
+        /* Nefes Animasyonu */
+        .breath-circle { width: 100px; height: 100px; background: var(--accent); border-radius: 50%; margin: 20px auto; opacity: 0.5; transition: all 4s linear; }
+        .expanding { transform: scale(1.8); opacity: 0.8; }
     </style>
 </head>
 <body>
     <div class="app-card">
-        <div id="settingsBtn" class="settings-icon hidden" onclick="showScreen('settingsScreen')">⚙️</div>
+        <div id="settingsBtn" class="settings-icon hidden" onclick="toggleMenu(true)">⚙️</div>
         
+        <div id="menuOverlay" class="overlay hidden" onclick="toggleMenu(false)">
+            <div class="side-menu" onclick="event.stopPropagation()">
+                <h3>Ayarlar</h3>
+                <p id="userLabel" style="color:var(--accent);"></p>
+                <button class="main-btn" onclick="showScreen('musicScreen'); toggleMenu(false)">🎵 Müzik Seç</button>
+                <button class="main-btn" style="background:#ef4444; margin-top:50px;" onclick="logout()">Çıkış Yap</button>
+                <p style="font-size:0.6rem; margin-top:20px;">Kapatmak için sola tıkla</p>
+            </div>
+        </div>
+
         <div id="statusArea">
             <div class="logo-circle">DO</div>
             <div class="stats-row">
@@ -43,48 +66,56 @@
         </div>
 
         <div id="loginScreen">
-            <p id="msg" style="font-size:0.8rem; color:var(--accent);">Buluta Bağlanılıyor...</p>
-            <input type="text" id="userNameInput" placeholder="Kullanıcı adın...">
-            <button class="main-btn" id="connectBtn" onclick="connect()">BAĞLAN</button>
+            <p id="msg">Bağlanıyor...</p>
+            <input type="text" id="userNameInput" placeholder="İsmin nedir?">
+            <button class="main-btn" onclick="connect()">GİRİŞ</button>
         </div>
-        
+
         <div id="mainScreen" class="hidden">
-            <h3 id="welcomeText">SELAM!</h3>
+            <h3 id="welcomeText"></h3>
             <div id="quoteText" class="quote-box"></div>
-            <button class="main-btn" onclick="showScreen('goalScreen')">ODAKLANMAYI BAŞLAT</button>
+            <button class="main-btn" onclick="showScreen('goalScreen')">ODAKLAN</button>
+            <button id="sadSupport" class="main-btn hidden" style="background:#8b5cf6;" onclick="showScreen('breathScreen')">🧘 Nefes Egzersizi Yap</button>
         </div>
 
         <div id="goalScreen" class="hidden">
-            <h3>Ne Yapıyoruz?</h3>
-            <input type="text" id="targetInput" placeholder="Örn: Kitap okumak">
-            <p style="font-size:0.8rem; margin:10px 0 5px;">Modunu Seç:</p>
+            <input type="text" id="targetInput" placeholder="Hedefin ne?">
             <div class="emoji-grid">
                 <div class="emoji-item active" onclick="selectEmoji(this, '📚')">📚</div>
                 <div class="emoji-item" onclick="selectEmoji(this, '💻')">💻</div>
-                <div class="emoji-item" onclick="selectEmoji(this, '✍️')">✍️</div>
-                <div class="emoji-item" onclick="selectEmoji(this, '🎨')">🎨</div>
                 <div class="emoji-item" onclick="selectEmoji(this, '🧘')">🧘</div>
+                <div class="emoji-item" onclick="selectEmoji(this, '😔')">😔</div>
+                <div class="emoji-item" onclick="selectEmoji(this, '🎨')">🎨</div>
                 <div class="emoji-item" onclick="selectEmoji(this, '🏋️')">🏋️</div>
                 <div class="emoji-item" onclick="selectEmoji(this, '🚀')">🚀</div>
                 <div class="emoji-item" onclick="selectEmoji(this, '💡')">💡</div>
             </div>
             <button class="main-btn" onclick="startFocus()">BAŞLAT</button>
-            <button class="main-btn" onclick="showScreen('mainScreen')" style="background:transparent; font-size:0.8rem;">Vazgeç</button>
+        </div>
+
+        <div id="musicScreen" class="hidden">
+            <h3>Müzik Seç 🎵</h3>
+            <div class="music-item" onclick="playMusic('lofi', this)">☕ Lofi Beats</div>
+            <div class="music-item" onclick="playMusic('rain', this)">🌧️ Yağmur Sesi</div>
+            <div class="music-item" onclick="playMusic('forest', this)">🌲 Doğa Sesi</div>
+            <div class="music-item" onclick="playMusic('none', this)">🔇 Sessizlik</div>
+            <button class="main-btn" onclick="showScreen('mainScreen')">TAMAM</button>
+        </div>
+
+        <div id="breathScreen" class="hidden">
+            <h3 id="breathAction">Hazır mısın?</h3>
+            <div id="bCircle" class="breath-circle"></div>
+            <button class="main-btn" onclick="showScreen('mainScreen')">BİTİR</button>
         </div>
 
         <div id="focusScreen" class="hidden">
-            <h2 id="focusTitle" style="color: var(--accent); margin-bottom:0;">📚 Kitap</h2>
+            <h2 id="focusTitle"></h2>
             <h1 class="timer-text" id="timer">25:00</h1>
-            <button class="main-btn" onclick="finishGoal()">BİTİRDİM!</button>
-        </div>
-
-        <div id="settingsScreen" class="hidden">
-            <h3 style="margin-top:20px;">Ayarlar ⚙️</h3>
-            <p id="userTag" style="color:var(--accent); font-weight:bold;"></p>
-            <button class="main-btn" onclick="logout()" style="background:#ef4444;">HESAPTAN ÇIKIŞ YAP</button>
-            <button class="main-btn" onclick="showScreen('mainScreen')" style="background:transparent; border:1px solid var(--border);">GERİ DÖ</button>
+            <button class="main-btn" onclick="finishGoal()">BİTTİ!</button>
         </div>
     </div>
+
+    <audio id="bgAudio" loop></audio>
 
     <script>
         const firebaseConfig = {
@@ -96,66 +127,93 @@
             messagingSenderId: "898035634670",
             appId: "1:898035634670:web:6f61ba8cdb24d6422e3eff"
         };
-
-        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        const quotes = [
-            "Başlamak için mükemmel olmayı bekleme!",
-            "Küçük adımlar büyük yolları açar.",
-            "Zihnini serbest bırak, hedefine odaklan.",
-            "Zorluklar, başarıyı değerli kılan şeylerdir.",
-            "Bugün dünden daha iyi olma vakti!"
-        ];
-
-        let selectedEmoji = "📚";
         let userData = { xp: 0, totalGoals: 0, streak: 0, name: "" };
+        let selectedEmoji = "📚";
 
-        // Bağlantı Kontrolü
-        database.ref(".info/connected").on("value", (snap) => {
-            if (snap.val() === true) {
-                document.getElementById('msg').innerText = "Bulut Hazır ✅";
-                document.getElementById('msg').style.color = "#4ade80";
-            }
-        });
-
-        window.onload = () => {
-            const saved = localStorage.getItem('derinOdakUser');
-            if(saved) connect(saved);
-        };
-
-        function connect(autoName = null) {
-            const n = autoName || document.getElementById('userNameInput').value.trim().toLowerCase();
+        function connect() {
+            const n = document.getElementById('userNameInput').value.trim().toLowerCase();
             if(!n) return;
-
-            document.getElementById('connectBtn').innerText = "GİRİŞ YAPILIYOR...";
-
-            database.ref('users/' + n).once('value').then((snapshot) => {
-                const data = snapshot.val();
-                userData = data || { xp: 0, totalGoals: 0, streak: 0, name: n };
-                if(!data) database.ref('users/' + n).set(userData);
-                
+            database.ref('users/' + n).once('value').then(s => {
+                userData = s.val() || { xp:0, totalGoals:0, streak:0, name:n };
                 localStorage.setItem('derinOdakUser', n);
-                updateUI();
                 showScreen('mainScreen');
+                updateUI();
                 document.getElementById('settingsBtn').classList.remove('hidden');
             });
+        }
+
+        function toggleMenu(open) {
+            document.getElementById('menuOverlay').classList.toggle('hidden', !open);
+            document.getElementById('userLabel').innerText = "@" + userData.name;
         }
 
         function selectEmoji(el, emoji) {
             document.querySelectorAll('.emoji-item').forEach(i => i.classList.remove('active'));
             el.classList.add('active');
             selectedEmoji = emoji;
+            if(emoji === '😔') {
+                document.getElementById('quoteText').innerText = "Canın mı sıkkın knk? Her şey geçer, sen çok değerlisin. Bir nefes alalım mı?";
+                document.getElementById('sadSupport').classList.remove('hidden');
+            } else {
+                document.getElementById('sadSupport').classList.add('hidden');
+                document.getElementById('quoteText').innerText = "Odaklanma vakti! Bugün harika işler yapacaksın.";
+            }
         }
 
-        function showScreen(screenId) {
-            ['loginScreen', 'mainScreen', 'goalScreen', 'focusScreen', 'settingsScreen'].forEach(id => {
-                document.getElementById(id).classList.add('hidden');
+        function playMusic(type, el) {
+            const audio = document.getElementById('bgAudio');
+            const links = {
+                lofi: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", // Örnek link
+                rain: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+                forest: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
+            };
+            document.querySelectorAll('.music-item').forEach(i => i.classList.remove('active'));
+            if(type === 'none') { audio.pause(); } 
+            else { audio.src = links[type]; audio.play(); el.classList.add('active'); }
+        }
+
+        function showScreen(id) {
+            ['loginScreen','mainScreen','goalScreen','focusScreen','musicScreen','breathScreen'].forEach(s => {
+                document.getElementById(s).classList.add('hidden');
             });
-            document.getElementById(screenId).classList.remove('hidden');
-            if(screenId === 'settingsScreen') {
-                document.getElementById('userTag').innerText = "@" + userData.name;
-            }
+            document.getElementById(id).classList.remove('hidden');
+            if(id === 'breathScreen') startBreathing();
+        }
+
+        function startBreathing() {
+            const circle = document.getElementById('bCircle');
+            const action = document.getElementById('breathAction');
+            const cycle = () => {
+                action.innerText = "Nefes Al... (4s)"; circle.classList.add('expanding');
+                setTimeout(() => { 
+                    action.innerText = "Tut... (4s)";
+                    setTimeout(() => {
+                        action.innerText = "Ver... (4s)"; circle.classList.remove('expanding');
+                    }, 4000);
+                }, 4000);
+            };
+            cycle(); setInterval(cycle, 12000);
+        }
+
+        function startFocus() {
+            document.getElementById('focusTitle').innerText = selectedEmoji + " " + document.getElementById('targetInput').value;
+            showScreen('focusScreen');
+            let t = 25*60;
+            const timer = setInterval(() => {
+                let m=Math.floor(t/60), s=t%60;
+                document.getElementById('timer').innerText = (m<10?"0"+m:m)+":"+(s<10?"0"+s:s);
+                if(t-- <= 0) { clearInterval(timer); finishGoal(); }
+            }, 1000);
+        }
+
+        function finishGoal() {
+            confetti({ particleCount: 150 });
+            userData.xp+=100; userData.totalGoals+=1; userData.streak+=1;
+            database.ref('users/'+userData.name).set(userData);
+            updateUI(); showScreen('mainScreen');
         }
 
         function updateUI() {
@@ -163,39 +221,14 @@
             document.getElementById('xpVal').innerText = userData.xp;
             document.getElementById('totalVal').innerText = userData.totalGoals;
             document.getElementById('streakVal').innerText = userData.streak;
-            document.getElementById('quoteText').innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
         }
 
-        function startFocus() {
-            const task = document.getElementById('targetInput').value || "Odaklanma";
-            document.getElementById('focusTitle').innerText = selectedEmoji + " " + task;
-            showScreen('focusScreen');
-            
-            let t = 25 * 60;
-            const timerInterval = setInterval(() => {
-                let m = Math.floor(t / 60), s = t % 60;
-                document.getElementById('timer').innerText = (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
-                if (t-- <= 0) {
-                    clearInterval(timerInterval);
-                    finishGoal();
-                }
-            }, 1000);
-            window.currentTimer = timerInterval;
-        }
+        function logout() { localStorage.removeItem('derinOdakUser'); location.reload(); }
 
-        function finishGoal() {
-            clearInterval(window.currentTimer);
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-            userData.xp += 100; userData.totalGoals += 1; userData.streak += 1;
-            database.ref('users/' + userData.name).set(userData);
-            updateUI();
-            showScreen('mainScreen');
-        }
-
-        function logout() {
-            localStorage.removeItem('derinOdakUser');
-            location.reload();
-        }
+        window.onload = () => {
+            const saved = localStorage.getItem('derinOdakUser');
+            if(saved) { document.getElementById('userNameInput').value = saved; connect(); }
+        };
     </script>
 </body>
 </html>
