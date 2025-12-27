@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Derin Odak - VIP</title>
+    <title>Derin Odak - Final</title>
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -14,23 +14,37 @@
         :root { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --accent: #38bdf8; --border: #334155; --shadow: #0284c7; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
         
-        /* SPLASH SCREEN - TAKILMAYA KARŞI GÜÇLENDİRİLDİ */
-        #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; opacity: 1; transition: opacity 0.5s ease; }
-        .splash-logo { font-size: 2.5rem; font-weight: 800; color: var(--accent); margin-bottom: 20px; }
-        .loader-bar-wrap { width: 150px; height: 4px; background: var(--border); border-radius: 10px; overflow: hidden; }
-        .loader-bar { width: 0%; height: 100%; background: var(--accent); animation: load 2.5s forwards linear; }
-        @keyframes load { to { width: 100%; } }
+        /* SPLASH SCREEN */
+        #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
+        .splash-logo { font-size: 2.5rem; font-weight: 800; color: var(--accent); }
 
         /* UYGULAMA KARTI */
-        .app-card { background: var(--card); padding: 1.5rem; border-radius: 35px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); width: 90%; max-width: 340px; text-align: center; border: 1px solid var(--border); position: relative; height: 580px; display: flex; flex-direction: column; justify-content: center; opacity: 0; transform: scale(0.9); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .app-visible { opacity: 1; transform: scale(1); }
+        .app-card { background: var(--card); padding: 1.5rem; border-radius: 35px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); width: 90%; max-width: 340px; text-align: center; border: 1px solid var(--border); position: relative; height: 580px; display: flex; flex-direction: column; justify-content: center; visibility: hidden; opacity: 0; transition: 0.5s; }
+        .app-visible { visibility: visible; opacity: 1; }
 
-        .hidden { display: none !important; }
-        .main-btn { background: var(--accent); color: #fff; padding: 14px; border-radius: 16px; font-weight: 800; width: 100%; margin-top: 12px; border: none; cursor: pointer; box-shadow: 0 5px 0 var(--shadow); transition: 0.1s; position: relative; top: 0; }
+        /* RENKLİ MOTİVASYON BLOĞU */
+        .quote-container { 
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(139, 92, 246, 0.1));
+            border: 2px solid var(--accent);
+            padding: 15px;
+            border-radius: 20px;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2);
+        }
+        .quote-container:active { transform: scale(0.95); background: rgba(56, 189, 248, 0.2); }
+        #quoteText { font-size: 0.9rem; font-weight: 600; color: #e2e8f0; line-height: 1.4; }
+
+        /* 3D BUTONLAR */
+        .main-btn { 
+            background: var(--accent); color: #fff; padding: 14px; border-radius: 16px; font-weight: 800; width: 100%; margin-top: 12px; border: none; cursor: pointer; font-size: 0.95rem;
+            box-shadow: 0 5px 0 var(--shadow); transition: 0.1s; position: relative; top: 0;
+        }
         .main-btn:active { top: 4px; box-shadow: 0 1px 0 var(--shadow); }
 
         .logo-circle { width: 55px; height: 55px; background: linear-gradient(135deg, #0284c7, #38bdf8); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; }
-        .stats-row { display: flex; justify-content: space-around; margin-bottom: 15px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 20px; border: 1px solid var(--border); }
+        .stats-row { display: flex; justify-content: space-around; margin-bottom: 10px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 20px; border: 1px solid var(--border); }
         .stat-val { display: block; font-size: 1.1rem; color: var(--accent); font-weight: 800; }
         
         input { width: 100%; padding: 14px; border-radius: 15px; border: 2px solid var(--border); background: var(--bg); color: var(--text); margin: 10px 0; font-size: 16px; outline: none; }
@@ -38,6 +52,7 @@
         .settings-icon { position: absolute; top: 25px; right: 25px; font-size: 1.6rem; cursor: pointer; z-index: 100; }
         .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 110; border-radius: 35px; backdrop-filter: blur(5px); }
         .side-menu { position: absolute; top: 0; right: 0; width: 80%; height: 100%; background: var(--card); z-index: 120; border-radius: 0 35px 35px 0; padding: 25px; border-left: 1px solid var(--border); }
+        
         .emoji-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 15px 0; }
         .emoji-item { background: var(--bg); padding: 10px; border-radius: 15px; cursor: pointer; font-size: 1.3rem; border: 2px solid transparent; box-shadow: 0 4px 0 var(--border); transition: 0.2s; }
         .emoji-item.active { border-color: var(--accent); box-shadow: 0 4px 0 var(--accent); }
@@ -47,9 +62,7 @@
 
     <div id="splashScreen">
         <div class="splash-logo">DERİN ODAK</div>
-        <div class="loader-bar-wrap">
-            <div class="loader-bar"></div>
-        </div>
+        <p style="color:var(--accent); margin-top:10px;">Yükleniyor...</p>
     </div>
 
     <div id="appCard" class="app-card">
@@ -61,10 +74,9 @@
                 <p id="userTag" style="color:var(--accent); font-weight:bold;"></p>
                 <hr style="border:0; border-top:1px solid var(--border); margin:20px 0;">
                 <button class="main-btn" style="background:#ef4444; box-shadow:0 5px 0 #991b1b;" onclick="logout()">ÇIKIŞ YAP</button>
-                <a href="https://instagram.com/SİZİN_ADRESİNİZ" target="_blank" style="text-decoration:none;">
+                <a id="instaLink" href="https://instagram.com/KENDI_ADINIZ" target="_blank" style="text-decoration:none;">
                     <button class="main-btn" style="background:linear-gradient(45deg, #f09433, #bc1888); box-shadow:0 5px 0 #831843; margin-top:20px;">Instagram 📸</button>
                 </a>
-                <p style="font-size:0.7rem; color:#64748b; margin-top:30px;">Kapatmak için sola dokun</p>
             </div>
         </div>
 
@@ -83,20 +95,23 @@
         </div>
 
         <div id="mainScreen" class="hidden">
-            <h3 id="welcomeText">SELAM!</h3>
-            <p id="quoteBox" style="font-size:0.8rem; color:#94a3b8; min-height:40px;">Odaklanmaya hazır mısın?</p>
+            <h3 id="welcomeText" style="margin-bottom:5px;">SELAM!</h3>
+            <div class="quote-container" onclick="newQuote()">
+                <div id="quoteText">"Başlamak için mükemmel olmayı bekleme!"</div>
+                <p style="font-size:0.6rem; margin-top:5px; opacity:0.6;">Değiştirmek için dokun ✨</p>
+            </div>
             <button class="main-btn" onclick="showScreen('goalScreen')">YENİ ODAK BAŞLAT</button>
         </div>
 
         <div id="goalScreen" class="hidden">
-            <input type="text" id="targetInput" placeholder="Neye odaklanıyoruz?">
-            <div class="emoji-grid" id="emojiGrid">
+            <input type="text" id="targetInput" placeholder="Hedefin ne?">
+            <div class="emoji-grid">
                 <div class="emoji-item active" onclick="selectEmoji(this, '📚')">📚</div>
                 <div class="emoji-item" onclick="selectEmoji(this, '💻')">💻</div>
                 <div class="emoji-item" onclick="selectEmoji(this, '🧘')">🧘</div>
-                <div class="emoji-item" onclick="selectEmoji(this, '😔')">😔</div>
+                <div class="emoji-item" onclick="selectEmoji(this, '🚀')">🚀</div>
             </div>
-            <button class="main-btn" onclick="startFocus()">BAŞLAT</button>
+            <button class="main-btn" onclick="startFocus()">ODAKLAN</button>
         </div>
 
         <div id="focusScreen" class="hidden">
@@ -120,17 +135,18 @@
         const database = firebase.database();
 
         let userData = { xp: 0, totalGoals: 0, streak: 0, name: "" };
-        let currentEmoji = "📚";
+        const quotes = [
+            "Başlamak için mükemmel olmayı bekleme!",
+            "Küçük adımlar büyük yolları açar.",
+            "Zihnini serbest bırak, hedefine odaklan.",
+            "Yarın, bugün yapmadıkların için pişman olma.",
+            "En büyük zafer, hiç düşmemek değil, her düştüğünde kalkmaktır.",
+            "Odaklandığın her saniye seni zirveye taşır."
+        ];
 
-        // KESİN ÇÖZÜM: Splash Screen Kapatma Fonksiyonu
-        function closeSplash() {
-            const splash = document.getElementById('splashScreen');
-            const app = document.getElementById('appCard');
-            splash.style.opacity = '0';
-            setTimeout(() => {
-                splash.style.display = 'none';
-                app.classList.add('app-visible');
-            }, 500);
+        function newQuote() {
+            const q = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('quoteText').innerText = `"${q}"`;
         }
 
         window.onload = () => {
@@ -140,8 +156,14 @@
                     if(s.val()) { userData = s.val(); updateUI(); }
                 });
             }
-            // 3 saniye sonra her ne olursa olsun splash'i kapat
-            setTimeout(closeSplash, 3000);
+            setTimeout(() => {
+                document.getElementById('splashScreen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('splashScreen').style.display = 'none';
+                    document.getElementById('appCard').classList.add('app-ready');
+                    if(saved) { showScreen('mainScreen'); document.getElementById('settingsBtn').classList.remove('hidden'); }
+                }, 500);
+            }, 3000);
         };
 
         function connect() {
@@ -157,10 +179,12 @@
             });
         }
 
-        function selectEmoji(el, emoji) {
-            document.querySelectorAll('.emoji-item').forEach(i => i.classList.remove('active'));
-            el.classList.add('active');
-            currentEmoji = emoji;
+        function updateUI() {
+            document.getElementById('welcomeText').innerText = "SELAM, " + userData.name.toUpperCase();
+            document.getElementById('xpVal').innerText = userData.xp;
+            document.getElementById('totalVal').innerText = userData.totalGoals;
+            document.getElementById('streakVal').innerText = userData.streak;
+            document.getElementById('userTag').innerText = "@" + userData.name;
         }
 
         function showScreen(id) {
@@ -170,21 +194,16 @@
             document.getElementById(id).classList.remove('hidden');
         }
 
-        function toggleMenu(open) {
-            document.getElementById('menuOverlay').classList.toggle('hidden', !open);
-            document.getElementById('userTag').innerText = "@" + userData.name;
-        }
-
-        function updateUI() {
-            document.getElementById('welcomeText').innerText = "SELAM, " + userData.name.toUpperCase();
-            document.getElementById('xpVal').innerText = userData.xp;
-            document.getElementById('totalVal').innerText = userData.totalGoals;
-            document.getElementById('streakVal').innerText = userData.streak;
+        function toggleMenu(open) { document.getElementById('menuOverlay').classList.toggle('hidden', !open); }
+        function selectEmoji(el, emoji) {
+            document.querySelectorAll('.emoji-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
+            window.currentEmoji = emoji;
         }
 
         function startFocus() {
             const task = document.getElementById('targetInput').value || "Odaklanma";
-            document.getElementById('focusTitle').innerText = currentEmoji + " " + task;
+            document.getElementById('focusTitle').innerText = (window.currentEmoji || "📚") + " " + task;
             showScreen('focusScreen');
             let t = 25*60;
             const timer = setInterval(() => {
@@ -195,7 +214,7 @@
         }
 
         function finishGoal() {
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            confetti({ particleCount: 150 });
             userData.xp+=100; userData.totalGoals+=1; userData.streak+=1;
             database.ref('users/'+userData.name).set(userData);
             updateUI(); showScreen('mainScreen');
