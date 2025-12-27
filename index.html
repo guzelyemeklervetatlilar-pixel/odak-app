@@ -15,43 +15,49 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
         .app-card { background: var(--card); padding: 1.5rem; border-radius: 35px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); width: 90%; max-width: 340px; text-align: center; border: 1px solid var(--border); }
         .hidden { display: none !important; }
-        .main-btn { background: var(--accent); color: #fff; padding: 16px; border-radius: 18px; font-weight: 800; width: 100%; margin-top: 10px; border:none; cursor:pointer; font-size: 1rem; }
-        .main-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .logo-circle { width: 50px; height: 50px; background: linear-gradient(135deg, #0284c7, #38bdf8); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; }
-        .stats-row { display: flex; justify-content: space-around; margin-bottom: 15px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 15px; }
-        .stat-val { display: block; font-size: 1rem; color: var(--accent); font-weight: 800; }
-        input { width: 100%; padding: 14px; border-radius: 15px; border: 2px solid var(--border); background: var(--bg); color: var(--text); margin: 10px 0; box-sizing: border-box; font-size: 16px; }
-        .timer-text { font-size: 4rem; font-weight: 900; color: var(--accent); margin: 10px 0; }
+        .main-btn { background: var(--accent); color: #fff; padding: 16px; border-radius: 18px; font-weight: 800; width: 100%; margin-top: 10px; border:none; cursor:pointer; font-size: 1rem; transition: 0.3s; }
+        .main-btn:active { transform: scale(0.95); }
+        .logo-circle { width: 60px; height: 60px; background: linear-gradient(135deg, #0284c7, #38bdf8); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; font-size: 1.5rem; box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); }
+        .stats-row { display: flex; justify-content: space-around; margin-bottom: 20px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 20px; border: 1px solid var(--border); }
+        .stat-val { display: block; font-size: 1.1rem; color: var(--accent); font-weight: 800; }
+        input { width: 100%; padding: 14px; border-radius: 15px; border: 2px solid var(--border); background: var(--bg); color: var(--text); margin: 10px 0; box-sizing: border-box; font-size: 16px; outline: none; }
+        input:focus { border-color: var(--accent); }
+        .timer-text { font-size: 4.5rem; font-weight: 900; color: var(--accent); margin: 20px 0; text-shadow: 0 0 20px rgba(56, 189, 248, 0.2); }
+        #msg { font-size: 0.8rem; margin-bottom: 10px; font-weight: 600; }
     </style>
 </head>
 <body>
     <div class="app-card">
         <div id="statusArea">
-            <div class="logo-circle">D</div>
+            <div class="logo-circle">DO</div>
             <div class="stats-row">
-                <div>SERİ 🔥 <span id="streakVal" class="stat-val">0</span></div>
-                <div>HEDEF ✅ <span id="totalVal" class="stat-val">0</span></div>
-                <div>PUAN ✨ <span id="xpVal" class="stat-val">0</span></div>
+                <div>SERİ 🔥<span id="streakVal" class="stat-val">0</span></div>
+                <div>HEDEF ✅<span id="totalVal" class="stat-val">0</span></div>
+                <div>PUAN ✨<span id="xpVal" class="stat-val">0</span></div>
             </div>
         </div>
+
         <div id="loginScreen">
-            <p id="msg" style="font-size: 0.8rem; color: var(--accent);">Bağlantı Kontrol Ediliyor...</p>
+            <p id="msg">Bağlantı Kontrolü...</p>
             <input type="text" id="userNameInput" placeholder="Adını yaz knk...">
             <button class="main-btn" id="connectBtn" onclick="connect()">BAĞLAN</button>
         </div>
         
         <div id="mainScreen" class="hidden">
-            <h3 id="welcomeText"></h3>
-            <button class="main-btn" onclick="showScreen('goalScreen')">ODAKLAN</button>
-            <button class="main-btn" onclick="logout()" style="background:transparent; color: #ef4444; font-size:0.7rem;">Çıkış Yap</button>
+            <h3 id="welcomeText">SELAM!</h3>
+            <button class="main-btn" onclick="showScreen('goalScreen')">YENİ ODAK BAŞLAT</button>
+            <button class="main-btn" onclick="logout()" style="background:transparent; color: #ef4444; border: 1px solid #ef4444; margin-top:20px;">Çıkış Yap</button>
         </div>
 
         <div id="goalScreen" class="hidden">
-            <input type="text" id="targetInput" placeholder="Neye odaklanıyoruz?">
-            <button class="main-btn" onclick="startFocus()">BAŞLAT</button>
+            <h3>Hedefin Ne?</h3>
+            <input type="text" id="targetInput" placeholder="Örn: Matematik çalışmak">
+            <button class="main-btn" onclick="startFocus()">ODAKLANMAYI BAŞLAT</button>
+            <button class="main-btn" onclick="showScreen('mainScreen')" style="background:transparent;">Geri Dön</button>
         </div>
 
         <div id="focusScreen" class="hidden">
+            <h2 id="focusTitle" style="color: var(--accent);">Odaklan...</h2>
             <h1 class="timer-text" id="timer">25:00</h1>
             <button class="main-btn" onclick="finishGoal()">BİTİRDİM!</button>
         </div>
@@ -67,19 +73,18 @@
             messagingSenderId: "898035634670",
             appId: "1:898035634670:web:6f61ba8cdb24d6422e3eff"
         };
-        // GÜVENLİ BAĞLANTI
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
+
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // Bağlantı durumunu izle
         database.ref(".info/connected").on("value", (snap) => {
+            const msg = document.getElementById('msg');
             if (snap.val() === true) {
-                document.getElementById('msg').innerText = "Bulut Hazır ✅";
-                document.getElementById('msg').style.color = "#4ade80";
+                msg.innerText = "Bulut Hazır ✅";
+                msg.style.color = "#4ade80";
             } else {
-                document.getElementById('msg').innerText = "Bağlanıyor...";
+                msg.innerText = "Bağlanıyor...";
+                msg.style.color = "#38bdf8";
             }
         });
 
@@ -113,10 +118,8 @@
                 updateUI();
                 showScreen('mainScreen');
             }).catch((err) => {
-                console.error(err);
-                alert("Bağlantı hatası! Lütfen internetini veya Firebase kurallarını kontrol et.");
+                alert("Bağlantı hatası!");
                 btn.disabled = false;
-                btn.innerText = "TEKRAR DENE";
             });
         }
 
@@ -127,24 +130,17 @@
             document.getElementById(screenId).classList.remove('hidden');
         }
 
-        function save() {
-            if(userData.name) database.ref('users/' + userData.name).set(userData);
-        }
-
         function updateUI() {
-            document.getElementById('welcomeText').innerText = "Selam, " + userData.name.toUpperCase();
+            document.getElementById('welcomeText').innerText = "SELAM, " + userData.name.toUpperCase();
             document.getElementById('xpVal').innerText = userData.xp;
             document.getElementById('totalVal').innerText = userData.totalGoals;
             document.getElementById('streakVal').innerText = userData.streak;
         }
 
-        function logout() {
-            localStorage.removeItem('derinOdakUser');
-            location.reload();
-        }
-
         function startFocus() {
-            if(!document.getElementById('targetInput').value) return;
+            const target = document.getElementById('targetInput').value;
+            if(!target) return;
+            document.getElementById('focusTitle').innerText = target;
             showScreen('focusScreen');
             let t = 25 * 60;
             const timerInterval = setInterval(() => {
@@ -159,14 +155,19 @@
         }
 
         function finishGoal() {
-            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
             userData.xp += 100; 
             userData.totalGoals += 1; 
             userData.streak += 1;
-            save();
+            database.ref('users/' + userData.name).set(userData);
+            updateUI();
             showScreen('mainScreen');
+        }
+
+        function logout() {
+            localStorage.removeItem('derinOdakUser');
+            location.reload();
         }
     </script>
 </body>
 </html>
-
